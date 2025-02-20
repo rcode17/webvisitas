@@ -28,7 +28,7 @@ jobs:
           node-version: '22.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       # Instalar Angular CLI
       - name: Install Angular CLI
