@@ -1,0 +1,55 @@
+<div class="container-fluid login-container">
+  <div class="row h-100">
+    <!-- Columna izquierda para imagen (solo visible en escritorio) -->
+    <div class="col-md-6 login-bg d-none d-md-block"></div>
+
+    <!-- Columna derecha para formulario -->
+    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center p-0">
+      <!-- Imagen en dispositivos móviles -->
+      <div class="mobile-bg w-100 d-md-none"></div>
+      <!-- Formulario -->
+      <div class="form-container">
+        <div class="text-center mb-4">
+          <img src="assets/img/logoStefanini.png" alt="Logo" height="60px">
+        </div>
+        <p class="text-center text-secondary fs-6">Introduzca sus credenciales para iniciar sesión</p>
+        <form (submit)="onSubmit(email,password)">
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo <span class="text-danger">*</span></label>
+            <input type="email" #email class="form-control" placeholder="nombre@latam.stefanini.com"  value="olquijada@latam.stefanini.com" required autocomplete="off">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+            <input type="password" #password class="form-control" value="febrero_2025" placeholder="*****" required>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">Recordarme</label>
+            </div>
+            <a href="#" class="text-decoration-none">¿Olvidó su contraseña?</a>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+      </div>
+
+      <!-- Modal de Error -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        El correo no existe en la lista.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>

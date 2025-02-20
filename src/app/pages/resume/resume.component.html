@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center my-3">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-link fs-3 text-primary">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <h3 class="text-center m-0">{{ mesActual }}</h3>
+            <button class="btn btn-link fs-3 text-primary">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+        <div class="d-flex">
+            <select class="form-select w-auto me-2" id="selectFilter" [(ngModel)]="clienteSeleccionado">
+                <option value="todos" selected>Todos</option>
+                <option value="cliente">Cliente</option>
+                <option value="noCliente">No Cliente</option>
+            </select>
+            <select class="form-select w-auto" id="selectYear">
+                <option value="2025" selected>2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="visitas.length > 0; else noVisits">
+        <div class="card mb-3" *ngFor="let visita of visitas; let i = index">
+            <div class="row g-0">
+                <div class="col-md-2 d-flex justify-content-center align-items-center" style="background-color: #f8f9fa;">
+                    <div class="day text-center">
+                        <h5 class="display-4 text-primary">{{ visita.diaVisita.split('-')[2] }}</h5>
+                        <h6>{{ getMonthName(visita.diaVisita.split('-')[1]) }}</h6>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Primera sección -->
+                            <div class="col-md-5">
+                                <h6 class="card-title">{{ visita.codProyecto }}</h6>
+                                <p class="card-text"> {{visita.codCliente }}</p>
+                            </div>
+                    
+                            <!-- Segunda sección -->
+                            <div class="col-md-6">
+                                <p class="card-text"><strong>Numero de visita: </strong> {{ visita.idVisita }}</p>
+                                 <p class="card-text">
+                                    <strong>Alerta Oportunidad:  </strong>
+                                    <span *ngIf="visita.generaOportunidad; else noAlert">
+                                        <i class="bi bi-bell-fill text-danger" style="margin-left: 5px;"></i> <!-- Ícono de alerta en rojo -->
+                                    </span>
+                                    <ng-template #noAlert>
+                                        <i class="bi bi-bell-slash-fill text-muted" style="margin-left: 5px;"></i> <!-- Ícono de sin alerta -->
+                                    </ng-template>
+                                </p>
+                                                               
+                                <p class="card-text"><strong>Persona Visitada:</strong> {{ visita.nombreVisitada }}</p>
+                                <p class="card-text">
+                                    <strong>Observaciones:</strong>
+                                    <span *ngIf="isExpanded[i]; else collapsed">
+                                        {{ visita.observaciones }}
+                                    </span>
+                                    <ng-template #collapsed>
+                                        {{ visita.observaciones | slice: 0:20 }}...
+                                        <a href="javascript:void(0)" (click)="toggleDescription(i)">Ver más</a>
+                                    </ng-template>
+                                </p>
+                                <p class="card-text"><strong>N°: Personas </strong>{{ contarRegistros(visita)}}  <a (click)="mostrarPersonas(visita)" class="detalles-link">Ver detalles</a> </p>
+                               
+                            </div>
+                    
+                            <!-- Tercera sección -->
+                            <div class="col-md-1">
+                                <div class="action-buttons d-flex flex-column justify-content-end my-1"> <!-- Cambiado a flex-column -->
+                                    <button class="btn btn-link btn-md text-danger mb-1" (click)="eliminarVisita(visita.idVisita)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    <button class="btn btn-link btn-md text-info-emphasis mb-1" (click)="editarVisita(visita)">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary mb-1"  *ngIf="visita.esCliente"  (click)="agregarPersona(visita)">
+                                        <i class="bi bi-person-plus"></i> 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #noVisits>
+        <p class="text-center">No hay visitas registradas.</p>
+    </ng-template>
+</div>

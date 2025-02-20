@@ -1,0 +1,253 @@
+<div class="container" *ngIf="agregar">
+  <h2 class="mb-4 text-center">Registro de visita</h2>
+  <form (ngSubmit)="onSubmit()" #visitForm="ngForm" novalidate>
+    <div class="row g-3">
+      <!-- Primera Fila -->
+      <div class="col-md-6">
+        <label for="usuario" class="form-label">Usuario<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="usuario" [value]="responsable" disabled>
+      </div>
+      <div class="col-md-6">
+        <label for="emailUsuario" class="form-label">Email de usuario<span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="emailUsuario" [value]="emailPersona" disabled>
+      </div>
+
+      <!-- Es cliente -->
+      <div class="col-md-12 d-flex">
+        <label class="form-label">¿Es cliente?<span class="text-danger">*</span></label>
+        <div class="form-check mx-3">
+          <input class="form-check-input" type="radio" name="esCliente" id="clienteSi" value="si"
+            [(ngModel)]="esCliente" required>
+          <label class="form-check-label" for="clienteSi">Sí</label>
+        </div>
+        <div class="form-check mx-3">
+          <input class="form-check-input" type="radio" name="esCliente" id="clienteNo" value="no"
+            [(ngModel)]="esCliente">
+          <label class="form-check-label" for="clienteNo">No</label>
+        </div>
+      </div>
+
+      <!-- Campos específicos para cliente -->
+      <div class="col-md-6" *ngIf="esCliente === 'si'">
+        <label for="practica" class="form-label">Cliente<span class="text-danger">*</span></label>
+        <select class="form-select" id="practica" [(ngModel)]="practica" name="practica" (change)="onClienteChange($event)" required>
+          <option *ngFor="let user of uniqueClients" [value]="user.codCliente + '-' + user.cliente">
+            {{ user.codCliente }} - {{ user.cliente }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col-md-6" *ngIf="esCliente === 'si'">
+        <label for="cliente" class="form-label">Proyecto<span class="text-danger">*</span></label>
+        <select class="form-select" id="cliente" [(ngModel)]="cliente" name="cliente" (change)="onProyectoChange($event)" required>
+          <option *ngFor="let user of proyectosFiltrados" [value]="user.codProyecto + '-' + user.descProyecto">
+            {{ user.codProyecto }} - {{ user.descProyecto }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Campo de entrada abierto para no cliente -->
+      <div class="col-md-12" *ngIf="esCliente === 'no'">
+        <label for="nombreCliente" class="form-label">Nombre del cliente<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="nombreCliente" [(ngModel)]="cliente" name="cliente" required>
+      </div>
+
+      <!-- Campos generales -->
+      <div class="col-md-6">
+        <label for="diaVisita" class="form-label">Día de la visita<span class="text-danger">*</span></label>
+        <input type="date" class="form-control" id="diaVisita" [(ngModel)]="diaVisita" name="diaVisita" required >
+      </div>
+      <div class="col-md-6">
+        <label for="rangoHora" class="form-label">Rango de hora<span class="text-danger">*</span></label>
+        <select class="form-select" id="rangoHora" [(ngModel)]="rangoHora" name="rangoHora" required>
+          <option value=1>8 am a 1 pm</option>
+          <option value=2>2 pm a 6 pm</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="tipoVisita" class="form-label">Tipo de visita<span class="text-danger">*</span></label>
+        <select class="form-select" id="tipoVisita" [(ngModel)]="tipoVisita" name="tipoVisita" required>
+          <option value=1>Prospección</option>
+          <option value=2>Comercial</option>
+          <option value=3>Seguimiento</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="modeVisita" class="form-label">Modalidad<span class="text-danger">*</span></label>
+        <select class="form-select" id="modeVisita" [(ngModel)]="modeVisita" name="modeVisita" required>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+        </select>
+      </div>
+
+      <!-- Persona visitada -->
+      <div class="col-md-6">
+        <label for="personaVisitada" class="form-label">Nombre de la persona visitada<span
+            class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="personaVisitada" [(ngModel)]="personaVisitada"
+          name="personaVisitada" required>
+      </div>
+      <div class="col-md-6">
+        <label for="emailPersona" class="form-label">Email de la persona<span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="emailPersona" [value]="personaVisitadaEmail"  name="emailPersona"
+          required>
+      </div>
+
+      <!-- Nueva Fila - Descripción -->
+      <div class="col-md-12">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"
+          rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-check form-switch mt-3">
+      <input class="form-check-input" type="checkbox" id="alertaOportunidadComercial"
+        [(ngModel)]="alertaOportunidadComercial" name="alertaOportunidadComercial">
+      <label class="form-check-label" for="alertaOportunidadComercial">¿Genera oportunidad comercial?</label>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex flex-column-reverse flex-md-row justify-content-between">
+      <a href="#" class="text-danger text-center text-md-start my-2" (click)="eliminarVisita()">Eliminar visita</a>
+      <div class="d-flex flex-column-reverse flex-md-row">
+        <button type="button" class="btn btn-outline-secondary my-2 mx-md-2" (click)="limpiarFormulario()">Limpiar
+          registro</button>
+        <button type="submit" class="btn btn-primary my-2" [disabled]="visitForm.invalid">Guardar</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="container" *ngIf="editar">
+  <h2 class="mb-4 text-center">Editar visita</h2>
+  <form (ngSubmit)="updateVisita()" #visitForm="ngForm" novalidate>
+    <div class="row g-3">
+      <!-- Primera Fila -->
+      <div class="col-md-6">
+        <label for="usuario" class="form-label">Usuario<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="usuario" [value]="responsable" disabled>
+      </div>
+      <div class="col-md-6">
+        <label for="emailUsuario" class="form-label">Email de usuario<span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="emailUsuario" [value]="emailPersona" disabled>
+      </div>
+
+      <div class="col-md-12 d-flex">
+        <label class="form-label">¿Es cliente?<span class="text-danger">*</span></label>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="esCliente"
+            id="clienteSi"
+            [checked]="esCliente"
+            (change)="!esCliente"
+          />
+          <label class="form-check-label" for="clienteSi">Sí</label>
+        </div>
+        <div class="form-check mx-3">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="esCliente"
+            id="clienteNo"
+            [checked]="!esCliente"
+            (change)="esCliente"
+          />
+          <label class="form-check-label" for="clienteNo">No</label>
+        </div>
+      </div>
+
+      <!-- Campos específicos para cliente -->
+      <div class="col-md-6" *ngIf="esCliente === 'si'">
+        <label for="practica" class="form-label">Cliente<span class="text-danger">*</span></label>
+        <select class="form-select" id="practica" [(ngModel)]="practica" name="practica" (change)="onClienteChange($event)" required>
+          <option *ngFor="let user of uniqueClients" [value]="user.codCliente + '-' + user.cliente">
+            {{ user.codCliente }} - {{ user.cliente }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col-md-6" *ngIf="esCliente === 'si'">
+        <label for="cliente" class="form-label">Proyecto<span class="text-danger">*</span></label>
+        <select class="form-select" id="cliente" [(ngModel)]="cliente" name="cliente" (change)="onProyectoChange($event)" required>
+          <option *ngFor="let user of proyectosFiltrados" [value]="user.codProyecto + '-' + user.descProyecto">
+            {{ user.codProyecto }} - {{ user.descProyecto }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Campo de entrada abierto para no cliente -->
+      <div class="col-md-12" *ngIf="esCliente === 'no'">
+        <label for="nombreCliente" class="form-label">Nombre del cliente<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="nombreCliente" [(ngModel)]="cliente" name="cliente" required>
+      </div>
+
+      <!-- Campos generales -->
+      <div class="col-md-6">
+        <label for="diaVisita" class="form-label">Día de la visita<span class="text-danger">*</span></label>
+        <input type="date" class="form-control" id="diaVisita" [(ngModel)]="diaVisita" name="diaVisita" required >
+      </div>
+      <div class="col-md-6">
+        <label for="rangoHora" class="form-label">Rango de hora<span class="text-danger">*</span></label>
+        <select class="form-select" id="rangoHora" [(ngModel)]="rangoHora" name="rangoHora" required>
+          <option value=1>8 am a 1 pm</option>
+          <option value=2>2 pm a 6 pm</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="tipoVisita" class="form-label">Tipo de visita<span class="text-danger">*</span></label>
+        <select class="form-select" id="tipoVisita" [(ngModel)]="tipoVisita" name="tipoVisita" required>
+          <option value=1>Prospección</option>
+          <option value=2>Comercial</option>
+          <option value=3>Seguimiento</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="modeVisita" class="form-label">Modalidad<span class="text-danger">*</span></label>
+        <select class="form-select" id="modeVisita" [(ngModel)]="modeVisita" name="modeVisita" required>
+          <option value="Presencial">Presencial</option>
+          <option value="Virtual">Virtual</option>
+        </select>
+      </div>
+
+      <!-- Persona visitada -->
+      <div class="col-md-6">
+        <label for="personaVisitada" class="form-label">Nombre de la persona visitada<span
+            class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="personaVisitada" [(ngModel)]="personaVisitada"
+          name="personaVisitada" required>
+      </div>
+      <div class="col-md-6">
+        <label for="emailPersona" class="form-label">Email de la persona<span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="emailPersona" [(ngModel)]="personaVisitadaEmail"  name="emailPersona"
+          required>
+      </div>
+
+      <!-- Nueva Fila - Descripción -->
+      <div class="col-md-12">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion"
+          rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-check form-switch mt-3">
+      <input class="form-check-input" type="checkbox" id="alertaOportunidadComercial"
+        [(ngModel)]="alertaOportunidadComercial" name="alertaOportunidadComercial">
+      <label class="form-check-label" for="alertaOportunidadComercial">¿Genera oportunidad comercial?</label>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex flex-column-reverse flex-md-row justify-content-between">
+      <a href="#" class="text-danger text-center text-md-start my-2" (click)="eliminarVisita()">Eliminar visita</a>
+      <div class="d-flex flex-column-reverse flex-md-row">
+        <button type="button" class="btn btn-outline-secondary my-2 mx-md-2" (click)="limpiarFormulario()">Limpiar
+          registro</button>
+        <button type="submit" class="btn btn-primary my-2" [disabled]="visitForm.invalid">Editar</button>
+      </div>
+    </div>
+  </form>
+</div>

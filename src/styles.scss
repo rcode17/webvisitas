@@ -1,0 +1,61 @@
+
+@use 'src/scss/variables' as *;
+
+.container
+{
+    padding-top: 5%;
+}
+
+.card {
+    box-shadow: $card-shadow !important;
+    border: none !important;
+}
+
+
+/* Primary */
+.btn-primary, .btn-outline-primary:hover {
+    background-color: $primary-color !important;
+    color: $white !important;
+    border-color: $primary-color !important;
+}
+
+.btn-primary:hover, .btn-outline-primary {
+    border-color: $primary-color !important;
+    color: $primary-color !important;
+    background-color: transparent !important;
+}
+
+.text-primary {
+    color: $primary-color !important;
+}
+
+.bg-primary {
+    background-color: $primary-color !important;
+}
+
+/* Secondary */
+.btn-secondary, .btn-outline-secondary:hover {
+    background-color: $secondary-color !important;
+    color: $white !important;
+}
+.btn-secondary:hover, .btn-outline-secondary {
+    border-color: $secondary-color !important;
+    color: $secondary-color !important;
+    background-color: transparent !important;
+}
+
+/* Danger */
+.btn-outline-danger {
+    border-color: $pink !important;
+    color: $pink !important;
+}
+
+.btn-outline-danger:hover {
+    background-color: $pink !important;
+    color: $white !important;
+}
+
+.text-danger
+{
+    color: $pink !important;
+}

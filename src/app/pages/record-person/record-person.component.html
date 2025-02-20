@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="d-flex align-items-center mb-4">
+        <button (click)="goBack()" class="nav-link fs-3 text-primary">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <h2 class="p-2 m-0">{{ personaEditando ? 'Actualizar persona' : 'Registro de personas' }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <label for="cliente" class="form-label">Cliente<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" [value]="visita.codCliente" disabled>
+    </div>
+    <div class="col-6 col-md-4">
+      <label for="diaVisita" class="form-label">Día de la visita<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="diaVisita" [value]="visita.diaVisita" disabled>
+    </div>
+    <div class="col-6 col-md-4">
+      <label for="rangoHora" class="form-label">Rango de hora<span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="rangoHora" [value]="visita.rangoVisita.nombre" disabled>
+    </div>
+  </div>
+
+  <!-- Mostrar formulario si no hay personas agregadas -->
+<div *ngIf="mostrarForm || personaEditando">
+  <form id="personForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+    <div class="row g-3 mt-3">
+      <div class="col-md-12">
+        <label for="tipoPersona" class="form-label">Tipo de persona<span class="text-danger">*</span></label>
+        <select class="form-select" id="tipoPersona" [(ngModel)]="tipoPersona" name="tipoPersona" required>
+          <option value="Cliente">Cliente</option>
+          <option value="Colaborador">Colaborador</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-3">
+      <div class="col-md-6">
+        <label for="personaVisitada" class="form-label">Nombre de la persona visitada<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="personaVisitada" [(ngModel)]="personaVisitada" name="personaVisitada" required>
+      </div>
+      <div class="col-md-6">
+        <label for="emailPersona" class="form-label">Email de la persona<span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="emailPersona" [(ngModel)]="emailPersona" name="emailPersona" required>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-3">
+      <div class="col-md-12">
+        <label for="observaciones" class="form-label">Observaciones<span class="text-danger">*</span></label>
+        <textarea class="form-control" id="observaciones" [(ngModel)]="observaciones" name="observaciones" rows="3" required></textarea>
+      </div>
+    </div>
+
+    <div class="form-check form-switch mt-3">
+      <input class="form-check-input" type="checkbox" id="alertaSeguimiento" [(ngModel)]="alertaSeguimiento" name="alertaSeguimiento">
+      <label class="form-check-label" for="alertaSeguimiento">¿Dejar alerta de seguimiento?</label>
+    </div>
+
+    <div class="d-flex flex-column-reverse flex-md-row justify-content-between">
+      <a href="#" class="text-danger text-center text-md-start my-2" (click)="limpiarFormulario()">Limpiar registro</a>
+      <div class="d-flex flex-column-reverse flex-md-row">
+        <button type="submit" class="btn btn-primary my-2">{{ personaEditando ? 'Actualizar' : 'Guardar' }}</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+  <!-- Mostrar listado de personas si hay personas agregadas -->
+  <div *ngIf="mostrarList">
+    <div class="my-3">
+      <div *ngFor="let persona of personas; let i = index" class="card p-3 d-flex flex-column flex-md-row justify-content-between align-items-md-start">
+    
+        <div class="info d-flex flex-column flex-md-row my-1 w-100">
+            <!-- Primera sección -->
+            <div class="visit-details col-md-6">
+              <p class="card-text"><strong>id:</strong> {{ persona.idVisitaServicio }}</p>
+                <p class="card-text"><strong>Nombre:</strong> {{ persona.nombrePersona }}</p>
+                <p class="card-text"><strong>Email:</strong> {{ persona.emailPersona }}</p>
+                <p class="card-text"><strong>Tipo Persona:</strong> {{ persona.tipoPersona }}</p>
+            </div>
+    
+            <!-- Segunda sección -->
+            <div class="visit-details col-md-6">
+              <p class="card-text">
+                <strong>Alerta Seguimiento:  </strong>
+                <span *ngIf="persona.esAlerta; else noAlert">
+                    <i class="bi bi-bell-fill text-danger" style="margin-left: 5px;"></i> <!-- Ícono de alerta en rojo -->
+                </span>
+                <ng-template #noAlert>
+                    <i class="bi bi-bell-slash-fill text-muted" style="margin-left: 5px;"></i> <!-- Ícono de sin alerta -->
+                </ng-template>
+            </p>
+                <p class="card-text">
+                    <strong>Observaciones:</strong>
+                    <span *ngIf="isExpanded[i]; else collapsed">
+                        {{ persona.observaciones }}
+                    </span>
+                    <ng-template #collapsed>
+                        {{ persona.observaciones | slice: 0:20 }}...
+                        <a href="javascript:void(0)" (click)="toggleDescription(i)">Ver más</a>
+                    </ng-template>
+                </p>
+            </div>
+        </div>
+    
+        <!-- Tercera sección centrada -->
+        <div class="tags px-2 px-md-5 my-1 d-flex justify-content-center">
+            <span class="badge rounded-pill bg-warning m-1">Seguimiento</span>
+        </div>
+    
+        <!-- Cuarta sección -->
+        <div class="action-buttons d-flex flex-column justify-content-start my-1">
+            <button class="btn btn-link btn-md text-danger mb-1" (click)="deletePersona(persona)">
+                <i class="bi bi-trash"></i>
+            </button>
+            <button class="btn btn-link btn-md text-info-emphasis" (click)="editarPersona(persona)">
+                <i class="bi bi-pencil"></i>
+            </button>
+        </div>
+    </div>
+    </div>
+    <button class="btn btn-outline-secondary mb-1" (click)="mostrarFormulario()">
+      <i class="bi bi-person-plus"></i>
+    </button>
+  
+  </div>
+  </div>

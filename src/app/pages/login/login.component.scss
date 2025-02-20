@@ -1,0 +1,27 @@
+@use 'src/scss/variables' as *;
+
+.login-container {
+    height: 100vh;
+}
+.login-bg {
+    background: url('../../../assets/img/img-login.png') no-repeat right center;
+    background-size: cover;
+}
+.form-container {
+    max-width: 400px;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+@media (max-width: 767.98px) {
+    .mobile-bg {
+        height: 25%;
+        background: url('../../../assets/img/img-login.png') no-repeat center center;
+        background-size: cover;
+    }
+    .form-container {
+        height: 70%;
+    }
+}

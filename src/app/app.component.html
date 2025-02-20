@@ -1,0 +1,12 @@
+<div class="container-fluid m-0 p-0">
+  <div class="row m-0 p-0">
+    <div class="col-2 col-md-1 m-0 p-0" *ngIf="!esLogin()">
+      <app-sidenav class="container-sidenav" [isOpen]="isSidenavOpen" (toggleSidenav)="toggleSidenav()"></app-sidenav>
+    </div>
+    <div class="col-md-12 m-0 p-0" [ngClass]="{'col-10': !esLogin()}">
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

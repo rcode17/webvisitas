@@ -1,0 +1,35 @@
+// Colores
+$midnight-blue: #0b1641;  // Usado como el color principal
+$spotlight-blue: #324691;  // Un tono de azul que apoya al principal
+$blue: #006bd3;
+$teal: #16857b;
+$purple: #350094;
+$pink: #c70160;
+$orange: #ff692c;
+$green: #00d99d;
+$yellow: #ffac00;
+$light-blue: #89c8fc;
+$light-teal: #73c3b2;
+$light-purple: #9c6fe8;
+$light-pink: #f19bb3;
+
+// Degradados
+$gradient-blue: linear-gradient(to right, #0b1641, #324691); // Degradado entre Midnight Blue y Spotlight Blue
+$gradient-purple: linear-gradient(to right, #350094, #c70160); // Degradado entre Purple y Pink
+$gradient-green: linear-gradient(to right, #00d99d, #16857b); // Degradado entre Green y Teal
+
+// Variables de colores
+$primary-color: $spotlight-blue;
+$secondary-color: $light-blue;
+$accent-color: $midnight-blue;
+$accent-color-light: $teal;
+
+// Fondo y Texto
+$white: #ffffff;
+$gray: #666666;
+$gray-light: #f8f9fa;
+
+
+// Sombra de las tarjetas
+$card-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+
