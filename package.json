@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -21,7 +21,6 @@
     "@angular/router": "^19.0.6",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
-    "node": "^20.18.3",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.16.0",
     "tslib": "^2.3.0",
